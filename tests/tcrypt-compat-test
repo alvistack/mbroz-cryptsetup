@@ -16,6 +16,10 @@ CRYPTSETUP_LIB_VALGRIND=../.libs
 
 [ -z "$srcdir" ] && srcdir="."
 
+# Circumvent test failure due to Bionic builder; we need to decrease
+# the memlock limit here to mimic Xenial builder (see LP #1891473).
+ulimit -l 0
+
 function remove_mapping()
 {
 	[ -b /dev/mapper/$MAP ] && dmsetup remove --retry $MAP
