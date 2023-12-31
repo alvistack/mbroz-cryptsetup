@@ -47,6 +47,10 @@ TEST_UUID="12345678-1234-1234-1234-123456789abc"
 LOOPDEV=$(losetup -f 2>/dev/null)
 FIPS_MODE=$(cat /proc/sys/crypto/fips_enabled 2>/dev/null)
 
+# Circumvent test failure due to Bionic builder; we need to decrease
+# the memlock limit here to mimic Xenial builder (see LP #1891473).
+ulimit -l 0
+
 function remove_mapping()
 {
 	[ -b /dev/mapper/$DEV_NAME3 ] && dmsetup remove --retry $DEV_NAME3 >/dev/null 2>&1
