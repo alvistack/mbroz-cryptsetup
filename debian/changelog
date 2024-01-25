@@ -1,0 +1,5 @@
+cryptsetup (100:2.7.5-1) UNRELEASED; urgency=medium
+
+  * https://github.com/mbroz/cryptsetup/releases/tag/v2.7.5 
+
+ -- Wong Hoi Sing Edison <hswong3i@pantarei-design.com>  Fri, 06 Sep 2024 11:51:58 +0800
