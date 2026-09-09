@@ -1,0 +1,27 @@
+#!/bin/sh
+
+set -e
+
+if [ "$1" = install ] && [ ! -f "/etc/crypttab" ]; then
+	cat <<-EOC >/etc/crypttab
+	# <target name>	<source device>		<key file>	<options>
+	EOC
+fi
+
+# begin-remove-after: released:forky
+if [ "$1" = "upgrade" ] || [ "$1" = install ]; then
+	if [ "$(dpkg-divert --truename /lib/cryptsetup/askpass)" = /lib/cryptsetup/askpass.cryptsetup ] &&
+		[ "$(dpkg-divert --listpackage /lib/cryptsetup/askpass)" = cryptsetup-nuke-password ] &&
+		[ "$(dpkg-divert --truename /usr/lib/cryptsetup/askpass)" = /usr/lib/cryptsetup/askpass ]; then
+		# A pre-/usr-merge cryptsetup-nuke-password is installed.
+		echo "Mitigating diversion of /lib/cryptsetup/askpass on behalf of cryptsetup-nuke-password"
+		dpkg-divert --no-rename --package cryptsetup-nuke-password \
+			    --divert /usr/lib/cryptsetup/askpass.usr-is-merged \
+			    --add /usr/lib/cryptsetup/askpass
+	fi
+fi
+# end-remove-after
+
+#DEBHELPER#
+
+exit 0

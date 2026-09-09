@@ -1,0 +1,2 @@
+lib/*/cryptsetup/libcryptsetup-token-ssh.so
+sbin/cryptsetup-ssh
